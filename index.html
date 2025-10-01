@@ -18,7 +18,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 0;
+            margin: 0;
         }
 
         /* Loading Screen */
@@ -83,9 +84,9 @@
             background: white;
             border-radius: 0;
             padding: 0;
-            max-width: 500px;
+            max-width: 100%;
             width: 100%;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: none;
             opacity: 0;
             transition: opacity 0.3s ease;
         }
@@ -113,6 +114,12 @@
             background: white;
             border-radius: 8px;
             padding: 8px 15px;
+        }
+
+        @media (max-width: 768px) {
+            .logo {
+                max-width: 90%;
+            }
         }
 
         .logo svg {
@@ -241,7 +248,7 @@
             }
 
             .info-value {
-                font-size: 36px;
+                font-size: 22px;
             }
 
             .content {
