@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billout Relief - Approved</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f0f0f0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.3s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-logo {
+            width: 100%;
+            max-width: 350px;
+            height: 60px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loading-logo svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #e0e0e0;
+            border-top: 3px solid #B22234;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: #003868;
+            margin-top: 20px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        /* Main Container */
+        .container {
+            background: white;
+            border-radius: 0;
+            padding: 0;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .container.visible {
+            opacity: 1;
+        }
+
+        /* Header */
+        .header {
+            background: #003868;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .logo {
+            width: 100%;
+            max-width: 450px;
+            height: 70px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border-radius: 8px;
+            padding: 8px 15px;
+        }
+
+        .logo svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        /* Status Section */
+        .status-section {
+            background: #B22234;
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .checkmark {
+            width: 60px;
+            height: 60px;
+            background: white;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .checkmark svg {
+            width: 35px;
+            height: 35px;
+            fill: #B22234;
+        }
+
+        .status-section h2 {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .status-section p {
+            font-size: 16px;
+            font-weight: 400;
+            opacity: 0.95;
+        }
+
+        /* Content Section */
+        .content {
+            padding: 30px;
+        }
+
+        .confirmation-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #003868;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-box {
+            background: #f9f9f9;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 6px solid #003868;
+        }
+
+        .info-box:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .info-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #003868;
+            line-height: 1.2;
+        }
+
+        .next-steps {
+            background: #003868;
+            color: white;
+            padding: 25px 30px;
+            margin-top: 30px;
+        }
+
+        .next-steps h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .next-steps p {
+            font-size: 15px;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 20px;
+            }
+
+            .status-section h2 {
+                font-size: 32px;
+            }
+
+            .status-section p {
+                font-size: 16px;
+            }
+
+            .info-value {
+                font-size: 36px;
+            }
+
+            .content {
+                padding: 25px 20px;
+            }
+
+            .header {
+                padding: 25px 20px;
+            }
+
+            .status-section {
+                padding: 35px 20px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .info-value {
+                font-size: 22px;
+            }
+
+            .status-section h2 {
+                font-size: 28px;
+            }
+
+            .next-steps {
+                padding: 20px;
+            }
+
+            .next-steps h3 {
+                font-size: 16px;
+            }
+
+            .next-steps p {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-logo">
+            <svg viewBox="0 0 400 60" xmlns="http://www.w3.org/2000/svg">
+                <!-- Left stripes (3 thin stripes centered) -->
+                <rect x="5" y="20" width="115" height="5" fill="#B22234"/>
+                <rect x="5" y="27" width="115" height="5" fill="#B22234"/>
+                <rect x="5" y="34" width="115" height="5" fill="#B22234"/>
+                
+                <!-- 5 Stars in the middle - centered at middle stripe -->
+                <path d="M140,22 L144,29 L152,29 L146,34 L149,42 L140,37 L131,42 L134,34 L128,29 L136,29 Z" fill="#3C3B6E"/>
+                <path d="M170,22 L174,29 L182,29 L176,34 L179,42 L170,37 L161,42 L164,34 L158,29 L166,29 Z" fill="#3C3B6E"/>
+                <path d="M200,22 L204,29 L212,29 L206,34 L209,42 L200,37 L191,42 L194,34 L188,29 L196,29 Z" fill="#3C3B6E"/>
+                <path d="M230,22 L234,29 L242,29 L236,34 L239,42 L230,37 L221,42 L224,34 L218,29 L226,29 Z" fill="#3C3B6E"/>
+                <path d="M260,22 L264,29 L272,29 L266,34 L269,42 L260,37 L251,42 L254,34 L248,29 L256,29 Z" fill="#3C3B6E"/>
+                
+                <!-- Right stripes (3 thin stripes centered) -->
+                <rect x="280" y="20" width="115" height="5" fill="#B22234"/>
+                <rect x="280" y="27" width="115" height="5" fill="#B22234"/>
+                <rect x="280" y="34" width="115" height="5" fill="#B22234"/>
+            </svg>
+        </div>
+        <div class="spinner"></div>
+        <div class="loading-text">Loading...</div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container" id="mainContainer">
+        <div class="header">
+            <div class="logo">
+                <svg viewBox="0 0 400 60" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Left stripes (3 thin stripes centered) -->
+                    <rect x="5" y="20" width="115" height="5" fill="#B22234"/>
+                    <rect x="5" y="27" width="115" height="5" fill="#B22234"/>
+                    <rect x="5" y="34" width="115" height="5" fill="#B22234"/>
+                    
+                    <!-- 5 Stars in the middle - centered at middle stripe -->
+                    <path d="M140,22 L144,29 L152,29 L146,34 L149,42 L140,37 L131,42 L134,34 L128,29 L136,29 Z" fill="#3C3B6E"/>
+                    <path d="M170,22 L174,29 L182,29 L176,34 L179,42 L170,37 L161,42 L164,34 L158,29 L166,29 Z" fill="#3C3B6E"/>
+                    <path d="M200,22 L204,29 L212,29 L206,34 L209,42 L200,37 L191,42 L194,34 L188,29 L196,29 Z" fill="#3C3B6E"/>
+                    <path d="M230,22 L234,29 L242,29 L236,34 L239,42 L230,37 L221,42 L224,34 L218,29 L226,29 Z" fill="#3C3B6E"/>
+                    <path d="M260,22 L264,29 L272,29 L266,34 L269,42 L260,37 L251,42 L254,34 L248,29 L256,29 Z" fill="#3C3B6E"/>
+                    
+                    <!-- Right stripes (3 thin stripes centered) -->
+                    <rect x="280" y="20" width="115" height="5" fill="#B22234"/>
+                    <rect x="280" y="27" width="115" height="5" fill="#B22234"/>
+                    <rect x="280" y="34" width="115" height="5" fill="#B22234"/>
+                </svg>
+            </div>
+            <h1>BAILOUT RELIEF</h1>
+        </div>
+
+        <div class="status-section">
+            <div class="checkmark">
+                <svg viewBox="0 0 24 24">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+            </div>
+            <h2>APPROVED</h2>
+            <p>Your credit card debt write off has been confirmed</p>
+        </div>
+
+        <div class="content">
+            <div class="confirmation-title">Confirmation Details:</div>
+            
+            <div class="info-box">
+                <div class="info-label">Status</div>
+                <div class="info-value">APPROVED</div>
+            </div>
+
+            <div class="info-box">
+                <div class="info-label">Amount</div>
+                <div class="info-value">$21,500</div>
+            </div>
+
+            <div class="info-box">
+                <div class="info-label">Effective Date</div>
+                <div class="info-value">October 1, 2025</div>
+            </div>
+
+            <div class="info-box">
+                <div class="info-label">Approval ID</div>
+                <div class="info-value">#08F3-78D2-JF34</div>
+            </div>
+
+            <div class="info-box">
+                <div class="info-label">Call Duration</div>
+                <div class="info-value">11:54 Min</div>
+            </div>
+        </div>
+
+        <div class="next-steps">
+            <h3>Next Steps</h3>
+            <p>Within 24 hours, your credit card balance will be reduced by the approved amount. Your credit report will also be updated accordingly.</p>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('load', function() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            const mainContainer = document.getElementById('mainContainer');
+
+            setTimeout(function() {
+                loadingScreen.classList.add('hidden');
+                mainContainer.classList.add('visible');
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
